@@ -11,7 +11,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
 from openai import OpenAI
 
@@ -92,16 +92,24 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
         api_key: Optional[str] = None,
         model: Optional[str] = None,
         max_iterations: int = DEFAULT_MAX_ITERATIONS,
+        system_prompt: Optional[str] = None,
+        temperature: float = 0.0,
+        tools_openai: Optional[list[dict[str, Any]]] = None,
+        tool_executor: Optional[Callable[[str, dict[str, Any]], str]] = None,
     ):
         resolved_api_key = api_key or get_env("OPENAI_API_KEY")
         self.client = OpenAI(api_key=resolved_api_key) if resolved_api_key else OpenAI()
         self.model = model or self.DEFAULT_MODEL
         self.max_iterations = max_iterations
+        self.system_prompt = system_prompt or self.SYSTEM_PROMPT
+        self.temperature = temperature
+        self.tools_openai = tools_openai or TOOLS_OPENAI
+        self.tool_executor = tool_executor or execute_tool
 
     def run(self, user_query: str, on_step: Optional[Callable[[Step], None]] = None) -> AgentTrace:
         trace = AgentTrace(user_query=user_query, model=self.model)
         messages = [
-            {"role": "system", "content": self.SYSTEM_PROMPT},
+            {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": user_query},
         ]
 
@@ -113,7 +121,8 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
 
             response = self.client.chat.completions.create(
                 model=self.model,
-                tools=TOOLS_OPENAI,
+                temperature=self.temperature,
+                tools=self.tools_openai,
                 tool_choice="auto",
                 messages=messages,
             )
@@ -164,7 +173,7 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
                 step.action_tool = tool_call.function.name
                 step.action_input = json.loads(tool_call.function.arguments)
                 tool_t0 = time.perf_counter()
-                observation_raw = execute_tool(step.action_tool, step.action_input)
+                observation_raw = self.tool_executor(step.action_tool, step.action_input)
                 tool_duration_ms = (time.perf_counter() - tool_t0) * 1000
                 step.observation = observation_raw
                 logger.log_tool_call(

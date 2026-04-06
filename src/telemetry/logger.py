@@ -109,6 +109,11 @@ class IndustryLogger:
         self.logger.addHandler(file_handler)
 
         # ── Console Handler: format dễ đọc với màu sắc ─────────────────
+        if hasattr(sys.stdout, "reconfigure"):
+            try:
+                sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.INFO)  # Console chỉ hiển thị INFO+
         console_handler.setFormatter(ConsoleFormatter())

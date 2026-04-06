@@ -1,0 +1,399 @@
+{
+  "model": "gpt-4o",
+  "generated_at": "2026-04-06 21:48:23",
+  "cases": [
+    {
+      "query": "Cho mình giá PC gaming RTX 4070 hiện có ở hệ thống và nêu shop.",
+      "must_include_any": [
+        "32.990.000",
+        "18.500.000"
+      ],
+      "must_include_all": [
+        "rtx 4070"
+      ],
+      "expected_tools": [
+        "search_pc_price"
+      ]
+    },
+    {
+      "query": "Sắp xếp card RTX theo giá giảm dần và cho mình 2 lựa chọn đầu tiên.",
+      "must_include_all": [
+        "rtx 4080",
+        "rtx 4070"
+      ],
+      "ordered_keywords": [
+        "rtx 4080",
+        "rtx 4070"
+      ],
+      "expected_tools": [
+        "sort_products"
+      ]
+    },
+    {
+      "query": "Kiểm tra giúp: Ryzen 7 7700X, main MSI B760M DDR4, RAM DDR5 32GB, RTX 4070 Super, PSU 650W, case mATX có tương thích không?",
+      "must_include_all": [
+        "không",
+        "am5",
+        "lga1700",
+        "ddr5",
+        "ddr4"
+      ],
+      "expected_tools": [
+        "check_pc_compatibility"
+      ]
+    },
+    {
+      "query": "Lấy top CPU mạnh nhất hiện nay và nêu 3 cái đầu.",
+      "must_include_all": [
+        "9950x3d",
+        "285k",
+        "9950x"
+      ],
+      "expected_tools": [
+        "get_top_cpu_rankings"
+      ]
+    },
+    {
+      "query": "Cho tôi top CPU Intel mạnh nhất hiện nay.",
+      "must_include_any": [
+        "intel core ultra 9 285k",
+        "intel"
+      ],
+      "expected_tools": [
+        "get_top_cpu_rankings"
+      ]
+    },
+    {
+      "query": "Tư vấn nhanh: nếu chỉ muốn build PC gaming tầm trung thì nên ưu tiên CPU hay GPU?",
+      "must_include_any": [
+        "gpu",
+        "cpu",
+        "gaming"
+      ],
+      "expected_tools": []
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "cases": 6,
+      "passes": 1,
+      "success_rate": 16.67,
+      "avg_latency_ms": 2717.39,
+      "p50_latency_ms": 2380.07,
+      "p99_latency_ms": 4359.31,
+      "avg_total_tokens": 230.83,
+      "normalized_cost_total_usd": 0.0138,
+      "normalized_cost_avg_usd": 0.0023,
+      "tool_calls": 0,
+      "avg_steps": 1
+    },
+    "agent_v1": {
+      "cases": 6,
+      "passes": 4,
+      "success_rate": 66.67,
+      "avg_latency_ms": 3264.79,
+      "p50_latency_ms": 3411.73,
+      "p99_latency_ms": 3797.09,
+      "avg_total_tokens": 1163.33,
+      "normalized_cost_total_usd": 0.0698,
+      "normalized_cost_avg_usd": 0.0116,
+      "tool_calls": 4,
+      "avg_steps": 1.67
+    },
+    "agent_v2": {
+      "cases": 6,
+      "passes": 6,
+      "success_rate": 100.0,
+      "avg_latency_ms": 2899.15,
+      "p50_latency_ms": 2789.23,
+      "p99_latency_ms": 3663.68,
+      "avg_total_tokens": 1882.17,
+      "normalized_cost_total_usd": 0.1129,
+      "normalized_cost_avg_usd": 0.0188,
+      "tool_calls": 5,
+      "avg_steps": 1.83
+    }
+  },
+  "results": {
+    "baseline": [
+      {
+        "mode": "baseline",
+        "query": "Cho mình giá PC gaming RTX 4070 hiện có ở hệ thống và nêu shop.",
+        "answer": "Xin lỗi, mình không thể cung cấp giá cụ thể hoặc thông tin về cửa hàng hiện tại. Tuy nhiên, bạn có thể tham khảo các hệ thống bán lẻ lớn như Phong Vũ, GearVN, hoặc An Phát Computer để tìm giá và cấu hình PC gaming với RTX 4070. Hãy kiểm tra trang web của họ hoặc liên hệ trực tiếp để có thông tin chi tiết nhất.",
+        "prompt_tokens": 86,
+        "completion_tokens": 84,
+        "total_tokens": 170,
+        "latency_ms": 2442.3121998552233,
+        "passed": false,
+        "reasons": [
+          "missing any of: 32.990.000, 18.500.000",
+          "missing expected tools: search_pc_price"
+        ],
+        "tools_used": [],
+        "step_count": 1
+      },
+      {
+        "mode": "baseline",
+        "query": "Sắp xếp card RTX theo giá giảm dần và cho mình 2 lựa chọn đầu tiên.",
+        "answer": "Dựa trên kiến thức chung về dòng card RTX, thứ tự từ cao đến thấp thường là:\n\n1. RTX 4090\n2. RTX 4080\n3. RTX 4070 Ti\n4. RTX 4070\n5. RTX 4060 Ti\n6. RTX 4060\n\nVì vậy, hai lựa chọn đầu tiên theo giá giảm dần sẽ là RTX 4090 và RTX 4080.",
+        "prompt_tokens": 88,
+        "completion_tokens": 90,
+        "total_tokens": 178,
+        "latency_ms": 1525.007899850607,
+        "passed": false,
+        "reasons": [
+          "missing expected tools: sort_products"
+        ],
+        "tools_used": [],
+        "step_count": 1
+      },
+      {
+        "mode": "baseline",
+        "query": "Kiểm tra giúp: Ryzen 7 7700X, main MSI B760M DDR4, RAM DDR5 32GB, RTX 4070 Super, PSU 650W, case mATX có tương thích không?",
+        "answer": "Có một số điểm cần lưu ý về cấu hình bạn đưa ra:\n\n1. **CPU và Mainboard**: Ryzen 7 7700X là CPU của AMD, trong khi MSI B760M là mainboard dành cho CPU Intel. Bạn cần chọn mainboard có socket AM5 để tương thích với Ryzen 7 7700X.\n\n2. **RAM**: Mainboard B760M bạn đề cập hỗ trợ RAM DDR4, trong khi bạn chọn RAM DDR5. Bạn cần chọn mainboard hỗ trợ DDR5 nếu muốn sử dụng RAM DDR5, hoặc đổi sang RAM DDR4 nếu giữ mainboard này.\n\n3. **GPU**: RTX 4070 Super là một lựa chọn tốt và không có vấn đề gì về tương thích với các linh kiện khác, miễn là case của bạn có đủ không gian và PSU đủ công suất.\n\n4. **PSU**: PSU 650W có thể đủ cho cấu hình này, nhưng nếu bạn có ý định nâng cấp hoặc ép xung, có thể cân nhắc PSU công suất cao hơn để đảm bảo hệ thống hoạt động ổn định.\n\n5. **Case mATX**: Đảm bảo case mATX của bạn có đủ không gian cho card đồ họa và các linh kiện khác.\n\nTóm lại, bạn cần điều chỉnh lại mainboard và RAM để đảm bảo tương thích với CPU Ryzen 7 7700X.",
+        "prompt_tokens": 115,
+        "completion_tokens": 287,
+        "total_tokens": 402,
+        "latency_ms": 4411.540699889883,
+        "passed": false,
+        "reasons": [
+          "missing keyword: lga1700",
+          "missing expected tools: check_pc_compatibility"
+        ],
+        "tools_used": [],
+        "step_count": 1
+      },
+      {
+        "mode": "baseline",
+        "query": "Lấy top CPU mạnh nhất hiện nay và nêu 3 cái đầu.",
+        "answer": "Tính đến thời điểm hiện tại, ba CPU mạnh nhất thường được nhắc đến là:\n\n1. **AMD Ryzen 9 7950X**: Với 16 nhân và 32 luồng, đây là một trong những CPU mạnh nhất của AMD cho hiệu năng đa nhiệm và chơi game.\n\n2. **Intel Core i9-13900K**: CPU này có 24 nhân (8 nhân hiệu năng cao và 16 nhân tiết kiệm điện) và 32 luồng, là lựa chọn hàng đầu của Intel cho hiệu năng cao.\n\n3. **AMD Ryzen Threadripper PRO 5995WX**: Với 64 nhân và 128 luồng, đây là CPU cực mạnh dành cho các công việc chuyên nghiệp đòi hỏi hiệu năng xử lý cao.\n\nLưu ý rằng thứ tự có thể thay đổi tùy theo nhu cầu sử dụng cụ thể và các bản cập nhật mới từ nhà sản xuất.",
+        "prompt_tokens": 83,
+        "completion_tokens": 190,
+        "total_tokens": 273,
+        "latency_ms": 3366.884999908507,
+        "passed": false,
+        "reasons": [
+          "missing keyword: 9950x3d",
+          "missing keyword: 285k",
+          "missing keyword: 9950x",
+          "missing expected tools: get_top_cpu_rankings"
+        ],
+        "tools_used": [],
+        "step_count": 1
+      },
+      {
+        "mode": "baseline",
+        "query": "Cho tôi top CPU Intel mạnh nhất hiện nay.",
+        "answer": "Tính đến thời điểm hiện tại, các CPU Intel mạnh nhất thường thuộc dòng Intel Core i9. Một số mẫu nổi bật có thể kể đến là:\n\n1. Intel Core i9-13900K\n2. Intel Core i9-13900KS\n3. Intel Core i9-13900KF\n\nNhững CPU này thường có nhiều nhân và luồng, xung nhịp cao, phù hợp cho các tác vụ nặng như chơi game, đồ họa, và xử lý dữ liệu.",
+        "prompt_tokens": 77,
+        "completion_tokens": 106,
+        "total_tokens": 183,
+        "latency_ms": 2317.8353998810053,
+        "passed": false,
+        "reasons": [
+          "missing expected tools: get_top_cpu_rankings"
+        ],
+        "tools_used": [],
+        "step_count": 1
+      },
+      {
+        "mode": "baseline",
+        "query": "Tư vấn nhanh: nếu chỉ muốn build PC gaming tầm trung thì nên ưu tiên CPU hay GPU?",
+        "answer": "Đối với một PC gaming tầm trung, bạn nên ưu tiên GPU hơn. GPU có ảnh hưởng lớn đến hiệu suất chơi game, đặc biệt là ở độ phân giải cao và cài đặt đồ họa cao. Tuy nhiên, cũng không nên bỏ qua CPU, hãy chọn một CPU đủ mạnh để không gây nghẽn cổ chai cho GPU. Một sự kết hợp cân đối giữa CPU và GPU sẽ mang lại trải nghiệm tốt nhất.",
+        "prompt_tokens": 89,
+        "completion_tokens": 90,
+        "total_tokens": 179,
+        "latency_ms": 2240.777699975297,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [],
+        "step_count": 1
+      }
+    ],
+    "agent_v1": [
+      {
+        "mode": "agent_v1",
+        "query": "Cho mình giá PC gaming RTX 4070 hiện có ở hệ thống và nêu shop.",
+        "answer": "Dưới đây là thông tin về PC gaming RTX 4070 hiện có:\n\n1. **PC Gaming RTX 4070 / Ryzen 7 7700X / 32GB RAM**\n   - Giá: 32.990.000 đ\n   - Shop: GeForce.vn\n   - [Xem chi tiết](https://geforce.vn/may-tinh-bo/pc-gaming-rtx4070-r7-7700x)\n   - Tình trạng: Còn hàng\n\nCác sản phẩm khác trong danh sách không phải là PC gaming RTX 4070.",
+        "prompt_tokens": 1336,
+        "completion_tokens": 142,
+        "total_tokens": 1478,
+        "latency_ms": 3812.3136998619884,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "search_pc_price"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v1",
+        "query": "Sắp xếp card RTX theo giá giảm dần và cho mình 2 lựa chọn đầu tiên.",
+        "answer": "Dưới đây là hai lựa chọn card RTX có giá cao nhất:\n\n1. **VGA ASUS ROG STRIX RTX 4080 SUPER 16GB OC**\n   - Giá: 28.500.000 đ\n   - Cửa hàng: Phong Vũ\n   - [Xem chi tiết](https://phongvu.vn/p/vga-asus-rog-strix-rtx4080-super-16gb)\n   - Tình trạng: Còn hàng\n\n2. **VGA NVIDIA GeForce RTX 4070 SUPER 12GB GDDR6X**\n   - Giá: 16.990.000 đ\n   - Cửa hàng: GeForce.vn\n   - [Xem chi tiết](https://geforce.vn/vga/rtx-4070-super)\n   - Tình trạng: Còn hàng\n\nBạn có thể tham khảo thêm thông tin chi tiết qua các liên kết trên.",
+        "prompt_tokens": 1047,
+        "completion_tokens": 219,
+        "total_tokens": 1266,
+        "latency_ms": 3151.0387999005616,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "sort_products"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v1",
+        "query": "Kiểm tra giúp: Ryzen 7 7700X, main MSI B760M DDR4, RAM DDR5 32GB, RTX 4070 Super, PSU 650W, case mATX có tương thích không?",
+        "answer": "Cấu hình bạn đưa ra có một số điểm chưa tương thích:\n\n1. **CPU - Motherboard**: CPU Ryzen 7 7700X sử dụng socket AM5, trong khi mainboard MSI B760M DDR4 sử dụng socket LGA1700. Hai socket này không khớp nhau.\n\n2. **RAM - Motherboard**: RAM DDR5 không phù hợp với mainboard chỉ hỗ trợ DDR4.\n\nCác thành phần khác như GPU và PSU, cũng như case và mainboard đều tương thích với nhau. Bạn cần chọn lại mainboard phù hợp với CPU và RAM, hoặc thay đổi CPU và RAM để phù hợp với mainboard hiện tại.",
+        "prompt_tokens": 1163,
+        "completion_tokens": 201,
+        "total_tokens": 1364,
+        "latency_ms": 3507.744299946353,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "check_pc_compatibility"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v1",
+        "query": "Lấy top CPU mạnh nhất hiện nay và nêu 3 cái đầu.",
+        "answer": "Dưới đây là ba CPU mạnh nhất hiện nay:\n\n1. **AMD Ryzen 9 7950X3D**\n   - Số nhân: 16\n   - Số luồng: 32\n   - Xung nhịp cơ bản: 4.2 GHz\n   - Xung nhịp tối đa: 5.7 GHz\n   - Bộ nhớ đệm: 144 MB\n   - Tiến trình: 5nm\n\n2. **Intel Core i9-13900KS**\n   - Số nhân: 24 (8 P-cores + 16 E-cores)\n   - Số luồng: 32\n   - Xung nhịp cơ bản: 3.2 GHz (P-core), 2.4 GHz (E-core)\n   - Xung nhịp tối đa: 6.0 GHz\n   - Bộ nhớ đệm: 36 MB\n   - Tiến trình: Intel 7\n\n3. **AMD Ryzen 9 7950X**\n   - Số nhân: 16\n   - Số luồng: 32\n   - Xung nhịp cơ bản: 4.5 GHz\n   - Xung nhịp tối đa: 5.7 GHz\n   - Bộ nhớ đệm: 80 MB\n   - Tiến trình: 5nm\n\nNhững CPU này nổi bật với hiệu năng mạnh mẽ, phù hợp cho các tác vụ nặng như chơi game, đồ họa, và xử lý dữ liệu lớn.",
+        "prompt_tokens": 397,
+        "completion_tokens": 326,
+        "total_tokens": 723,
+        "latency_ms": 3376.46869989112,
+        "passed": false,
+        "reasons": [
+          "missing keyword: 9950x3d",
+          "missing keyword: 285k",
+          "missing keyword: 9950x",
+          "missing expected tools: get_top_cpu_rankings"
+        ],
+        "tools_used": [],
+        "step_count": 1
+      },
+      {
+        "mode": "agent_v1",
+        "query": "Cho tôi top CPU Intel mạnh nhất hiện nay.",
+        "answer": "Dưới đây là một số CPU Intel mạnh hiện nay:\n\n1. **Intel Core i7-1360P**:\n   - Giá: 14.500.000 đ\n   - Cửa hàng: FPT Shop\n   - [Xem chi tiết](https://fptshop.com.vn/may-tinh/mini-pc-intel-nuc-i7-1360p)\n\n2. **Intel Core i5-13400**:\n   - Giá: 18.500.000 đ\n   - Cửa hàng: Phong Vũ\n   - [Xem chi tiết](https://phongvu.vn/p/may-tinh-intel-i5-13400-rtx3060)\n\n3. **Intel Core i3-13100**:\n   - Giá: 7.990.000 đ\n   - Cửa hàng: Thế Giới Di Động\n   - [Xem chi tiết](https://www.thegioididong.com/tin-tuc/pc-van-phong-i3-13100)\n\nHiện tại, các CPU Intel mạnh nhất thường thuộc dòng Core i9, tuy nhiên trong danh sách này chưa có thông tin về dòng Core i9. Bạn có thể tìm kiếm thêm thông tin từ các cửa hàng hoặc trang web công nghệ uy tín để có lựa chọn tốt nhất.",
+        "prompt_tokens": 1315,
+        "completion_tokens": 300,
+        "total_tokens": 1615,
+        "latency_ms": 3446.9875001814216,
+        "passed": false,
+        "reasons": [
+          "missing expected tools: get_top_cpu_rankings"
+        ],
+        "tools_used": [
+          "search_pc_price"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v1",
+        "query": "Tư vấn nhanh: nếu chỉ muốn build PC gaming tầm trung thì nên ưu tiên CPU hay GPU?",
+        "answer": "Trong việc build một PC gaming tầm trung, GPU thường được ưu tiên hơn CPU. Điều này là do GPU có ảnh hưởng lớn hơn đến hiệu suất chơi game, đặc biệt là ở độ phân giải cao và cài đặt đồ họa cao. Tuy nhiên, điều này không có nghĩa là bạn nên bỏ qua CPU hoàn toàn. Một CPU tốt sẽ đảm bảo rằng GPU của bạn không bị \"nghẽn cổ chai\" và có thể hoạt động hết công suất.\n\nTóm lại, nếu ngân sách có hạn, bạn nên đầu tư nhiều hơn vào GPU, nhưng cũng cần chọn một CPU đủ mạnh để hỗ trợ GPU đó.",
+        "prompt_tokens": 403,
+        "completion_tokens": 131,
+        "total_tokens": 534,
+        "latency_ms": 2294.1624999511987,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [],
+        "step_count": 1
+      }
+    ],
+    "agent_v2": [
+      {
+        "mode": "agent_v2",
+        "query": "Cho mình giá PC gaming RTX 4070 hiện có ở hệ thống và nêu shop.",
+        "answer": "Dưới đây là danh sách các PC gaming có card đồ họa RTX 4070 hiện có:\n\n1. **PC Gaming RTX 4070 / Ryzen 7 7700X / 32GB RAM**\n   - Giá: 32.990.000 đ\n   - Shop: GeForce.vn\n   - [Xem chi tiết](https://geforce.vn/may-tinh-bo/pc-gaming-rtx4070-r7-7700x)\n   - Tình trạng: Còn hàng\n\nCác sản phẩm khác trong danh sách không có card đồ họa RTX 4070. Nếu bạn cần thêm thông tin hoặc sản phẩm khác, hãy cho mình biết nhé!",
+        "prompt_tokens": 2008,
+        "completion_tokens": 165,
+        "total_tokens": 2173,
+        "latency_ms": 2507.9787001013756,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "search_pc_price"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v2",
+        "query": "Sắp xếp card RTX theo giá giảm dần và cho mình 2 lựa chọn đầu tiên.",
+        "answer": "Dưới đây là hai lựa chọn card đồ họa RTX có giá cao nhất hiện tại:\n\n1. **VGA ASUS ROG STRIX RTX 4080 SUPER 16GB OC**\n   - **Giá:** 28.500.000 đ\n   - **Shop:** Phong Vu\n   - [Xem chi tiết](https://phongvu.vn/p/vga-asus-rog-strix-rtx4080-super-16gb)\n   - **Tình trạng:** Còn hàng\n\n2. **VGA NVIDIA GeForce RTX 4070 SUPER 12GB GDDR6X**\n   - **Giá:** 16.990.000 đ\n   - **Shop:** GeForce.vn\n   - [Xem chi tiết](https://geforce.vn/vga/rtx-4070-super)\n   - **Tình trạng:** Còn hàng\n\nHy vọng thông tin này hữu ích cho bạn!",
+        "prompt_tokens": 1719,
+        "completion_tokens": 221,
+        "total_tokens": 1940,
+        "latency_ms": 2575.660499976948,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "sort_products"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v2",
+        "query": "Kiểm tra giúp: Ryzen 7 7700X, main MSI B760M DDR4, RAM DDR5 32GB, RTX 4070 Super, PSU 650W, case mATX có tương thích không?",
+        "answer": "Cấu hình bạn đưa ra có một số điểm chưa tương thích. Dưới đây là chi tiết:\n\n1. **CPU - Motherboard**: Không tương thích. CPU Ryzen 7 7700X sử dụng socket AM5, trong khi mainboard MSI B760M DDR4 sử dụng socket LGA1700. Bạn cần chọn một mainboard có socket AM5 để phù hợp với CPU này.\n\n2. **RAM - Motherboard**: Không tương thích. RAM DDR5 không phù hợp với mainboard chỉ hỗ trợ DDR4. Bạn cần chọn RAM DDR4 hoặc một mainboard hỗ trợ DDR5.\n\n3. **GPU - PSU**: Tương thích. GPU RTX 4070 Super yêu cầu nguồn tối thiểu khoảng 650W, và PSU hiện tại của bạn là 650W, đủ để đáp ứng.\n\n4. **Case - Motherboard**: Tương thích. Case mATX hỗ trợ form factor của mainboard.\n\n### Gợi ý:\n- Để cấu hình hoạt động tốt, bạn nên chọn một mainboard có socket AM5 và hỗ trợ RAM DDR5 để phù hợp với CPU và RAM hiện tại.",
+        "prompt_tokens": 1835,
+        "completion_tokens": 301,
+        "total_tokens": 2136,
+        "latency_ms": 3696.705900132656,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "check_pc_compatibility"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v2",
+        "query": "Lấy top CPU mạnh nhất hiện nay và nêu 3 cái đầu.",
+        "answer": "Dưới đây là danh sách 3 CPU mạnh nhất hiện nay theo bảng xếp hạng:\n\n1. **AMD Ryzen 9 9950X3D**\n   - Điểm CPU Mark: 70,221\n   - Giá: 675.59 USD\n   - Phân khúc: Desktop\n\n2. **Intel Core Ultra 9 285K**\n   - Điểm CPU Mark: 67,325\n   - Giá: 557.00 USD\n   - Phân khúc: Desktop\n\n3. **AMD Ryzen 9 9950X**\n   - Điểm CPU Mark: 65,810\n   - Giá: 519.00 USD\n   - Phân khúc: Desktop\n\nĐây là những CPU hàng đầu hiện nay, phù hợp cho các nhu cầu xử lý cao cấp như chơi game, đồ họa, và các tác vụ nặng khác.",
+        "prompt_tokens": 1739,
+        "completion_tokens": 206,
+        "total_tokens": 1945,
+        "latency_ms": 2962.088500149548,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "get_top_cpu_rankings"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v2",
+        "query": "Cho tôi top CPU Intel mạnh nhất hiện nay.",
+        "answer": "Dưới đây là danh sách top 5 CPU Intel mạnh nhất hiện nay theo bảng xếp hạng CPU Mark:\n\n1. **Intel Core Ultra 9 285K**\n   - Điểm CPU Mark: 67,325\n   - Giá: 557 USD\n   - Phân khúc: Desktop\n\n2. **Intel Core Ultra 7 265K**\n   - Điểm CPU Mark: 58,701\n   - Giá: 319.99 USD\n   - Phân khúc: Desktop\n\n3. **Intel Core i9-14900K**\n   - Điểm CPU Mark: 58,394\n   - Giá: 519.99 USD\n   - Phân khúc: Desktop\n\n4. **Intel Core i9-14900KF**\n   - Điểm CPU Mark: 58,289\n   - Giá: 465.99 USD\n   - Phân khúc: Desktop\n\n5. **Intel Core i9-13900K**\n   - Điểm CPU Mark: 58,233\n   - Giá: 539.99 USD\n   - Phân khúc: Desktop\n\nNếu bạn cần thêm thông tin hoặc muốn tìm mua các sản phẩm này tại Việt Nam, hãy cho tôi biết!",
+        "prompt_tokens": 1847,
+        "completion_tokens": 283,
+        "total_tokens": 2130,
+        "latency_ms": 3036.094899987802,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [
+          "get_top_cpu_rankings"
+        ],
+        "step_count": 2
+      },
+      {
+        "mode": "agent_v2",
+        "query": "Tư vấn nhanh: nếu chỉ muốn build PC gaming tầm trung thì nên ưu tiên CPU hay GPU?",
+        "answer": "Khi build một PC gaming tầm trung, việc lựa chọn giữa ưu tiên CPU hay GPU phụ thuộc vào nhu cầu và loại game bạn thường chơi:\n\n1. **Ưu tiên GPU**: \n   - Đối với hầu hết các game hiện nay, GPU đóng vai trò quan trọng hơn trong việc xử lý đồ họa và đảm bảo trải nghiệm chơi game mượt mà. \n   - Nếu bạn chơi các game yêu cầu đồ họa cao như AAA titles, thì nên đầu tư nhiều hơn vào GPU.\n\n2. **Ưu tiên CPU**:\n   - Nếu bạn chơi các game yêu cầu xử lý CPU nhiều hơn, như các game chiến thuật hoặc mô phỏng, thì CPU mạnh sẽ giúp cải thiện hiệu suất.\n   - Ngoài ra, nếu bạn có nhu cầu stream game hoặc làm việc đa nhiệm, một CPU mạnh cũng rất cần thiết.\n\nTóm lại, đối với một PC gaming tầm trung, thường thì bạn nên ưu tiên GPU, nhưng cũng không nên bỏ qua CPU. Cân bằng giữa hai thành phần này sẽ giúp bạn có một hệ thống tốt nhất cho nhu cầu của mình.",
+        "prompt_tokens": 739,
+        "completion_tokens": 230,
+        "total_tokens": 969,
+        "latency_ms": 2616.3768998812884,
+        "passed": true,
+        "reasons": [],
+        "tools_used": [],
+        "step_count": 1
+      }
+    ]
+  }
+}
