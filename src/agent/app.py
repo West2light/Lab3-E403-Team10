@@ -152,6 +152,22 @@ def render_product_cards(obs_json: str) -> None:
     try:
         data = json.loads(obs_json)
         if "results" in data:
+            if data.get("ranking_type") == "top_cpu":
+                for item in data.get("results", []):
+                    st.markdown(
+                        f"""
+<div class="product-card">
+  <div><b>#{item['rank']} - {html.escape(item['name'])}</b></div>
+  <div>CPU Mark: <b>{item['cpu_mark']}</b></div>
+  <div>Brand: {html.escape(item['brand'])} | Segment: {html.escape(item['segment'])}</div>
+  <div>Gia tham khao: ${item['price_usd']}</div>
+</div>
+""",
+                        unsafe_allow_html=True,
+                    )
+                if data.get("source_note"):
+                    render_step("🔭 Observation", "step-obs", html.escape(data["source_note"]))
+                return
             for r in data.get("results", []):
                 stock_badge = (
                     '<span class="badge-stock badge-yes">Còn hàng</span>'

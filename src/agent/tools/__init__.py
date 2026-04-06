@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any, Callable
 
-from . import check_pc_compatibility, search_pc_price, sort_products
+from . import check_pc_compatibility, get_top_cpu_rankings, search_pc_price, sort_products
 
 
 ToolHandler = Callable[..., str]
@@ -12,6 +12,7 @@ TOOLS = [
     search_pc_price.TOOL_SPEC,
     sort_products.TOOL_SPEC,
     check_pc_compatibility.TOOL_SPEC,
+    get_top_cpu_rankings.TOOL_SPEC,
 ]
 
 TOOLS_OPENAI = [
@@ -30,6 +31,7 @@ TOOL_HANDLERS: dict[str, ToolHandler] = {
     "search_pc_price": search_pc_price.run,
     "sort_products": sort_products.run,
     "check_pc_compatibility": check_pc_compatibility.run,
+    "get_top_cpu_rankings": get_top_cpu_rankings.run,
 }
 
 

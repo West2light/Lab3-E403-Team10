@@ -85,6 +85,17 @@ def print_observation(raw_json: str) -> None:
     try:
         data = json.loads(raw_json)
         if "results" in data:
+            if data.get("ranking_type") == "top_cpu":
+                print(f"   {C.GRAY}Top CPU hien tai:{C.RESET}")
+                for item in data.get("results", []):
+                    print(f"\n   {C.BOLD}[#{item['rank']}] {item['name']}{C.RESET}")
+                    print(f"       CPU Mark : {C.YELLOW}{item['cpu_mark']}{C.RESET}")
+                    print(f"       Brand    : {C.CYAN}{item['brand']}{C.RESET}")
+                    print(f"       Segment  : {C.WHITE}{item['segment']}{C.RESET}")
+                    print(f"       Gia USD  : {C.GREEN}${item['price_usd']}{C.RESET}")
+                if data.get("source_note"):
+                    print(f"\n   {C.DIM}{data['source_note']}{C.RESET}")
+                return
             total = data.get("total_found", 0)
             print(f"   {C.GRAY}Tìm thấy {C.WHITE}{total}{C.GRAY} sản phẩm:{C.RESET}")
             for i, r in enumerate(data.get("results", []), 1):
