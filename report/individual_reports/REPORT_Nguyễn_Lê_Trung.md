@@ -1,7 +1,7 @@
 # Individual Report: Lab 3 - Chatbot vs ReAct Agent
 
-- **Student Name**: [Member 4 Name]
-- **Student ID**: [Member 4 ID]
+- **Student Name**: Nguyễn Lê Trung
+- **Student ID**: 2A202600174
 - **Date**: 2026-04-06
 
 ---
@@ -10,7 +10,7 @@
 
 *Describe your specific contribution to the codebase (e.g., implemented a specific tool, fixed the parser, etc.).*
 
-- **Modules Implementated**: `src/agent/tools/check_pc_compatibility.py`, `src/agent/tools/__init__.py`, `src/agent/tools/common.py`
+- **Modules Implementated**: `src/agent/tools/check_pc_compatibility.py`
 - **Code Highlights**: Xây dựng tool `check_pc_compatibility` để kiểm tra socket CPU-mainboard, chuẩn RAM, công suất PSU cho GPU, và form factor case. Ngoài ra còn refactor file `tools.py` monolithic thành package `src/agent/tools/` để dễ bảo trì và mở rộng.
 - **Documentation**: Tool compatibility trả về JSON có `overall_compatible`, `summary`, `checks`, `issues`. Việc tách tool thành package giúp registry, dispatcher, mock data, và business logic được phân tách rõ ràng trong ReAct loop.
 
