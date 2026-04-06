@@ -3,7 +3,7 @@
 - **Team Name**: Team10
 - **Team Members**:
   1. Nguyễn Quốc Nam - Agent + UI/UX + `search_pc_price`
-  2. Phạm Anh Dũng - `sort_products`
+  2. Phạm Anh Dũng - 2A202600251 - `sort_products`
   3. Dương Quang Đông - `get_top_cpu_rankings`
   4. Nguyễn Lê Trung - 2A202600174 - `check_pc_compatibility` + tool structure refactor
   5. Vương Hoàng Giang - telemetry logging + benchmark testcase
