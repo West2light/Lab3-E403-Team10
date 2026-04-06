@@ -102,6 +102,11 @@ MOCK_DB: dict[str, list[dict[str, Any]]] = {
 
 def pick_dataset(query: str) -> list[dict[str, Any]]:
     normalized_query = query.lower()
+    if any(
+        keyword in normalized_query
+        for keyword in ["pc gaming", "bo pc", "may tinh", "danh sach pc", "cau hinh pc"]
+    ):
+        return MOCK_DB["default"]
     if any(keyword in normalized_query for keyword in ["laptop", "macbook", "notebook", "xps", "rog", "zephyrus"]):
         return MOCK_DB["laptop"]
     if any(keyword in normalized_query for keyword in ["ram", "ddr", "memory"]):

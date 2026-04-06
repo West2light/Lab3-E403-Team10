@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Cho mình giá PC gaming RTX 4070 hiện có ở hệ thống và nêu shop.",
+    "must_include_any": ["32.990.000", "18.500.000"],
+    "must_include_all": ["rtx 4070"],
+    "expected_tools": ["search_pc_price"]
+  },
+  {
+    "query": "Sắp xếp card RTX theo giá giảm dần và cho mình 2 lựa chọn đầu tiên.",
+    "must_include_all": ["rtx 4080", "rtx 4070"],
+    "ordered_keywords": ["rtx 4080", "rtx 4070"],
+    "expected_tools": ["sort_products"]
+  },
+  {
+    "query": "Kiểm tra giúp: Ryzen 7 7700X, main MSI B760M DDR4, RAM DDR5 32GB, RTX 4070 Super, PSU 650W, case mATX có tương thích không?",
+    "must_include_all": ["không", "am5", "lga1700", "ddr5", "ddr4"],
+    "expected_tools": ["check_pc_compatibility"]
+  },
+  {
+    "query": "Lấy top CPU mạnh nhất hiện nay và nêu 3 cái đầu.",
+    "must_include_all": ["9950x3d", "285k", "9950x"],
+    "expected_tools": ["get_top_cpu_rankings"]
+  },
+  {
+    "query": "Cho tôi top CPU Intel mạnh nhất hiện nay.",
+    "must_include_any": ["intel core ultra 9 285k", "intel"],
+    "expected_tools": ["get_top_cpu_rankings"]
+  },
+  {
+    "query": "Tư vấn nhanh: nếu chỉ muốn build PC gaming tầm trung thì nên ưu tiên CPU hay GPU?",
+    "must_include_any": ["gpu", "cpu", "gaming"],
+    "expected_tools": []
+  }
+]
