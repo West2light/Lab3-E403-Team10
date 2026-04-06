@@ -6,7 +6,6 @@ Bao gồm: schema cho Anthropic API và hàm thực thi thực tế
 import json
 import urllib.parse
 import urllib.request
-import re
 
 # ─────────────────────────────────────────────
 # TOOL SCHEMA (gửi lên Anthropic API)
@@ -156,9 +155,6 @@ def _pick_dataset(query: str) -> list:
         return _MOCK_DB["rtx"]
     return _MOCK_DB["default"]
 
-def _price_to_int(price_str: str) -> int:
-    digits = re.sub(r"[^\d]", "", price_str)
-    return int(digits) if digits else 0
 
 # ─────────────────────────────────────────────
 # EXECUTOR – hàm thực thi tool
@@ -171,9 +167,8 @@ def execute_tool(tool_name: str, tool_input: dict) -> str:
     """
     if tool_name == "search_pc_price":
         return _search_pc_price(**tool_input)
-    elif tool_name == "sort_products":
-        return _sort_products(**tool_input)
-
+    elif tool_name == "calculate_psu_wattage":
+        return calculate_psu_wattage(**tool_input)
     return json.dumps({"error": f"Tool '{tool_name}' không tồn tại."})
 
 
@@ -196,35 +191,38 @@ def _search_pc_price(query: str, max_results: int = 5) -> str:
     }
     return json.dumps(output, ensure_ascii=False, indent=2)
 
-def _sort_products(query: str, sort_order: str = "asc", max_results: int = 5) -> str:
+def calculate_psu_wattage(components: list) -> str:
     """
-    Sắp xếp sản phẩm theo giá.
-
-    Args:
-        query: từ khóa tìm kiếm
-        sort_order: "asc" = tăng dần, "desc" = giảm dần
-        max_results: số lượng kết quả tối đa
-
-    Returns:
-        JSON string chứa danh sách sản phẩm đã được sắp xếp
+    Tính toán công suất nguồn (PSU) đề xuất cho một bộ máy.
     """
-    dataset = _pick_dataset(query)
+    total_watts = 100 # Mainboard + Fan + RAM mặc định chiếm khoảng 100W
+    
+    for item in components:
+        item_lower = item.lower()
+        # Tính nhẩm CPU
+        if "i9" in item_lower or "ryzen 9" in item_lower: total_watts += 200
+        elif "i7" in item_lower or "ryzen 7" in item_lower: total_watts += 150
+        elif "i5" in item_lower or "ryzen 5" in item_lower: total_watts += 100
+        elif "i3" in item_lower or "ryzen 3" in item_lower: total_watts += 65
+        
+        # Tính nhẩm GPU
+        if "4090" in item_lower: total_watts += 450
+        elif "4080" in item_lower or "3090" in item_lower: total_watts += 320
+        elif "4070" in item_lower or "3080" in item_lower: total_watts += 250
+        elif "4060" in item_lower or "3060" in item_lower: total_watts += 170
+        elif "rx 7900" in item_lower: total_watts += 350
+        elif "rx 7800" in item_lower: total_watts += 260
+        elif "rx 7600" in item_lower: total_watts += 160
 
-    reverse = sort_order.lower() == "desc"
-    results = sorted(
-        dataset,
-        key=lambda item: _price_to_int(item.get("price", "0")),
-        reverse=reverse,
-    )[:max_results]
-
-    output = {
-        "query": query,
-        "sort_order": sort_order,
-        "total_found": len(results),
-        "results": results,
-        "source_note": "Dữ liệu mô phỏng đã được sắp xếp theo giá",
+    recommended_psu = total_watts + 150 # Dư ra 150W để an toàn và nâng cấp sau này
+    
+    result = {
+        "analyzed_components": components,
+        "estimated_load_wattage": total_watts,
+        "recommended_psu_wattage": recommended_psu,
+        "advice": f"Hệ thống tiêu thụ khoảng {total_watts}W. Nên chọn nguồn công suất thực từ {recommended_psu}W trở lên (chuẩn 80 Plus)."
     }
-    return json.dumps(output, ensure_ascii=False, indent=2)
+    return json.dumps(result, ensure_ascii=False)
 
 # ─────────────────────────────────────────────
 # TOOLS_OPENAI – schema cho OpenAI API
@@ -236,62 +234,33 @@ TOOLS_OPENAI = [
         "type": "function",
         "function": {
             "name": "search_pc_price",
-            "description": (
-                "Tìm kiếm giá PC / linh kiện máy tính trên web. "
-                "Trả về danh sách sản phẩm gồm tên, giá và link trang web. "
-                "Dùng tool này khi người dùng hỏi về giá máy tính, laptop, "
-                "hay bất kỳ linh kiện PC nào."
-            ),
+            "description": "Tìm kiếm giá linh kiện PC, máy tính, laptop trên mạng.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": (
-                            "Từ khóa tìm kiếm tiếng Việt hoặc tiếng Anh, "
-                            "ví dụ: 'PC gaming RTX 4070', 'laptop Dell XPS 15'"
-                        ),
-                    },
-                    "max_results": {
-                        "type": "integer",
-                        "description": "Số kết quả tối đa cần trả về (mặc định: 5)",
-                    },
+                    "query": {"type": "string", "description": "Tên sản phẩm cần tìm giá"},
+                    "max_results": {"type": "integer", "description": "Số kết quả trả về"}
                 },
-                "required": ["query"],
-            },
-        },
+                "required": ["query"]
+            }
+        }
     },
-        {
+    {
         "type": "function",
         "function": {
-            "name": "sort_products",
-            "description": (
-                "Sắp xếp danh sách sản phẩm theo giá tăng dần hoặc giảm dần. "
-                "Dùng khi người dùng muốn xem sản phẩm rẻ nhất, đắt nhất, "
-                "hoặc sắp xếp theo giá."
-            ),
+            "name": "calculate_psu_wattage",
+            "description": "Ước tính công suất nguồn (PSU) cần thiết dựa trên danh sách các linh kiện của một bộ PC.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": (
-                            "Từ khóa tìm kiếm tiếng Việt hoặc tiếng Anh, "
-                            "ví dụ: 'RTX 4080 Super', 'laptop Dell XPS', 'RAM DDR5'"
-                        ),
-                    },
-                    "sort_order": {
-                        "type": "string",
-                        "enum": ["asc", "desc"],
-                        "description": "Thứ tự sắp xếp: asc = giá tăng dần, desc = giá giảm dần",
-                    },
-                    "max_results": {
-                        "type": "integer",
-                        "description": "Số kết quả tối đa cần trả về (mặc định: 5)",
-                    },
+                    "components": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Danh sách các linh kiện chính (Ví dụ: ['Intel i7 13700K', 'RTX 4070 Ti', '32GB RAM DDR5'])"
+                    }
                 },
-                "required": ["query", "sort_order"],
-            },
-        },
+                "required": ["components"]
+            }
+        }
     }
 ]
