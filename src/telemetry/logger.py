@@ -71,25 +71,32 @@ class IndustryLogger:
     def __init__(
         self,
         name: str = "AI-Lab-Agent",
-        log_dir: str = "logs",
+        log_dir: Optional[str] = None,
         log_level: int = logging.DEBUG,
         max_bytes: int = 5 * 1024 * 1024,  # 5 MB mỗi file
         backup_count: int = 5,              # Giữ tối đa 5 file backup
     ):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(log_level)
-        self.log_dir = log_dir
+        
+        # Tự động tìm thư mục gốc của project (cách thư mục telemetry 2 cấp: src/telemetry)
+        if log_dir is None:
+            current_dir = os.path.dirname(os.path.abspath(__file__)) 
+            project_root = os.path.dirname(os.path.dirname(current_dir)) 
+            self.log_dir = os.path.join(project_root, "logs")
+        else:
+            self.log_dir = log_dir
 
         # Tránh thêm handler trùng lặp nếu logger đã được khởi tạo
         if self.logger.handlers:
             return
 
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir, exist_ok=True)
 
         # ── File Handler: JSON structured log với rotation ──────────────
         log_file = os.path.join(
-            log_dir, f"{datetime.now().strftime('%Y-%m-%d')}.log"
+            self.log_dir, f"{datetime.now().strftime('%Y-%m-%d')}.log"
         )
         file_handler = RotatingFileHandler(
             log_file,
