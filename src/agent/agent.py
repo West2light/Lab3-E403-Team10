@@ -7,13 +7,22 @@ Tracking đầy đủ từng bước, tách biệt khỏi UI.
 from __future__ import annotations
 
 import json
+import sys
 import time
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Callable, Optional
 
 from openai import OpenAI
 
 from tools import TOOLS_OPENAI, execute_tool
+
+
+SRC_ROOT = Path(__file__).resolve().parents[1]
+if str(SRC_ROOT) not in sys.path:
+    sys.path.append(str(SRC_ROOT))
+
+from telemetry.logger import logger
 
 
 @dataclass
@@ -110,6 +119,14 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
             if finish_reason == "stop":
                 step.duration_ms = (time.perf_counter() - t0) * 1000
                 trace.steps.append(step)
+                logger.log_agent_step(
+                    step_index=step.step_index,
+                    thought=step.thought,
+                    action_tool=step.action_tool,
+                    action_input=step.action_input,
+                    observation=step.observation,
+                    duration_ms=step.duration_ms,
+                )
                 if on_step:
                     on_step(step)
                 trace.final_answer = step.thought
@@ -119,6 +136,14 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
                 step.thought = step.thought or "[Agent không quyết định được hành động]"
                 step.duration_ms = (time.perf_counter() - t0) * 1000
                 trace.steps.append(step)
+                logger.log_agent_step(
+                    step_index=step.step_index,
+                    thought=step.thought,
+                    action_tool=step.action_tool,
+                    action_input=step.action_input,
+                    observation=step.observation,
+                    duration_ms=step.duration_ms,
+                )
                 if on_step:
                     on_step(step)
                 trace.final_answer = step.thought
@@ -129,8 +154,16 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
             for tool_call in msg.tool_calls:
                 step.action_tool = tool_call.function.name
                 step.action_input = json.loads(tool_call.function.arguments)
+                tool_t0 = time.perf_counter()
                 observation_raw = execute_tool(step.action_tool, step.action_input)
+                tool_duration_ms = (time.perf_counter() - tool_t0) * 1000
                 step.observation = observation_raw
+                logger.log_tool_call(
+                    tool_name=step.action_tool,
+                    inputs=step.action_input,
+                    result=observation_raw,
+                    duration_ms=tool_duration_ms,
+                )
                 messages.append(
                     {
                         "role": "tool",
@@ -141,6 +174,14 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
 
             step.duration_ms = (time.perf_counter() - t0) * 1000
             trace.steps.append(step)
+            logger.log_agent_step(
+                step_index=step.step_index,
+                thought=step.thought,
+                action_tool=step.action_tool,
+                action_input=step.action_input,
+                observation=step.observation,
+                duration_ms=step.duration_ms,
+            )
             if on_step:
                 on_step(step)
         else:
@@ -149,4 +190,12 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
         trace.total_duration_ms = (time.perf_counter() - start_total) * 1000
         if not trace.final_answer and trace.steps:
             trace.final_answer = trace.steps[-1].thought or "[Không có kết quả cuối cùng]"
+        logger.log_agent_complete(
+            user_query=user_query,
+            total_steps=len(trace.steps),
+            total_duration_ms=trace.total_duration_ms,
+            input_tokens=trace.input_tokens,
+            output_tokens=trace.output_tokens,
+            model=trace.model,
+        )
         return trace
