@@ -4,7 +4,7 @@
 - **Team Members**:
   1. Nguyễn Quốc Nam - Agent + UI/UX + `search_pc_price`
   2. Phạm Anh Dũng - `sort_products`
-  3. Dương Quang Đông - `get_top_cpu_rankings`
+  3. Dương Quang Đông - 2A202600445 - `get_top_cpu_rankings`
   4. Nguyễn Lê Trung - 2A202600174 - `check_pc_compatibility` + tool structure refactor
   5. Vương Hoàng Giang - 2A202600349 - telemetry logging + benchmark testcase
 - **Deployment Date**: 2026-04-06
