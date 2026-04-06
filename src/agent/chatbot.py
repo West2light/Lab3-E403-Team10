@@ -11,6 +11,9 @@ Cách chạy:
 import json
 import os
 import sys
+from pathlib import Path
+
+from dotenv import load_dotenv
 from agent import PCPriceAgent, Step
 
 # ─────────────────────────────────────────────
@@ -132,6 +135,9 @@ EXAMPLE_QUERIES = [
     "Tìm card màn hình RTX 4080 Super",
 ]
 
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+load_dotenv(PROJECT_ROOT / ".env")
 
 def check_api_key():
     if not os.getenv("OPENAI_API_KEY"):
