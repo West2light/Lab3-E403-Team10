@@ -1,11 +1,16 @@
 import time
 from typing import Dict, Any, Optional, Generator
 from openai import OpenAI
+from src.core.config import get_env, load_project_env
 from src.core.llm_provider import LLMProvider
+
+
+load_project_env()
 
 class OpenAIProvider(LLMProvider):
     def __init__(self, model_name: str = "gpt-4o", api_key: Optional[str] = None):
-        super().__init__(model_name, api_key)
+        resolved_api_key = api_key or get_env("OPENAI_API_KEY")
+        super().__init__(model_name, resolved_api_key)
         self.client = OpenAI(api_key=self.api_key)
 
     def generate(self, prompt: str, system_prompt: Optional[str] = None) -> Dict[str, Any]:

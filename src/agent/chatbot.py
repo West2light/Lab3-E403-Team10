@@ -15,13 +15,15 @@ import os
 import sys
 from pathlib import Path
 
-from dotenv import load_dotenv
+SRC_ROOT = Path(__file__).resolve().parents[1]
+if str(SRC_ROOT) not in sys.path:
+    sys.path.append(str(SRC_ROOT))
 
 from agent import PCPriceAgent, Step
+from core.config import load_project_env
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent
-load_dotenv(PROJECT_ROOT / ".env")
+load_project_env()
 
 
 class C:
@@ -137,7 +139,7 @@ def print_final_answer(answer: str, trace) -> None:
 def check_api_key() -> None:
     if not os.getenv("OPENAI_API_KEY"):
         print(f"{C.RED}❌ Chưa thiết lập OPENAI_API_KEY!{C.RESET}")
-        print(f"   Chạy: {C.YELLOW}export OPENAI_API_KEY='sk-...'{C.RESET}")
+        print(f"   Hãy thêm OPENAI_API_KEY vào file .env ở thư mục gốc dự án.{C.RESET}")
         sys.exit(1)
 
 

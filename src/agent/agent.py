@@ -15,14 +15,21 @@ from typing import Callable, Optional
 
 from openai import OpenAI
 
-from tools import TOOLS_OPENAI, execute_tool
-
-
 SRC_ROOT = Path(__file__).resolve().parents[1]
 if str(SRC_ROOT) not in sys.path:
     sys.path.append(str(SRC_ROOT))
 
-from telemetry.logger import logger
+if __package__:
+    from ..core.config import get_env, load_project_env
+    from ..telemetry.logger import logger
+    from .tools import TOOLS_OPENAI, execute_tool
+else:
+    from core.config import get_env, load_project_env
+    from telemetry.logger import logger
+    from tools import TOOLS_OPENAI, execute_tool
+
+
+load_project_env()
 
 
 @dataclass
@@ -85,7 +92,8 @@ Dừng sau khi đã có đủ thông tin từ tool và đưa ra câu trả lời
         model: Optional[str] = None,
         max_iterations: int = DEFAULT_MAX_ITERATIONS,
     ):
-        self.client = OpenAI(api_key=api_key) if api_key else OpenAI()
+        resolved_api_key = api_key or get_env("OPENAI_API_KEY")
+        self.client = OpenAI(api_key=resolved_api_key) if resolved_api_key else OpenAI()
         self.model = model or self.DEFAULT_MODEL
         self.max_iterations = max_iterations
 

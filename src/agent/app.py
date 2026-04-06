@@ -12,12 +12,23 @@ from __future__ import annotations
 
 import html
 import json
+import os
+import sys
 import time
+from pathlib import Path
 
 import streamlit as st
 from openai import OpenAI
 
+SRC_ROOT = Path(__file__).resolve().parents[1]
+if str(SRC_ROOT) not in sys.path:
+    sys.path.append(str(SRC_ROOT))
+
 from agent import PCPriceAgent
+from core.config import load_project_env
+
+
+load_project_env()
 
 
 st.set_page_config(
@@ -96,7 +107,12 @@ st.markdown(
 
 with st.sidebar:
     st.header("⚙️ Cấu hình")
-    api_key = st.text_input("OpenAI API Key", type="password", placeholder="sk-...")
+    api_key = st.text_input(
+        "OpenAI API Key",
+        type="password",
+        placeholder="sk-...",
+        value=os.getenv("OPENAI_API_KEY", ""),
+    )
     model = st.selectbox("Model", ["gpt-4o", "gpt-4o-mini"])
     st.markdown("---")
     if st.button("🗑️ Xoá lịch sử chat"):
